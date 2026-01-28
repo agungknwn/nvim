@@ -57,6 +57,14 @@ vim.api.nvim_create_autocmd("User", {
   callback = sync_theme,
 })
 
+-- Autocommand to Set filetype for .ipynb files
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = "*.ipynb",
+  callback = function()
+    vim.bo.filetype = "ipynb"
+  end,
+})
+
 -- set up timer to check theme periodically
 local timer = vim.uv.new_timer()
 if timer then

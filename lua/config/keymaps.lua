@@ -15,6 +15,7 @@ map("n", "<leader>jT", ":call jukit#cells#create_above(1)<CR>", opts) -- Create 
 map("n", "<leader>jdd", ":call jukit#cells#delete()<CR>", opts) -- Delete current cell
 map("n", "<leader>jhj", ":call jukit#splits#out_hist_scroll(1)<CR>", opts) -- out_hist_scroll_down
 map("n", "<leader>jhk", ":call jukit#splits#out_hist_scroll(0)<CR>", opts) -- out_hist_scroll_up
+map("n", "<leader>jnb", ":call jukit#convert#notebook_convert('jupyter-notebook')<CR>", opts) -- Create code cell below
 
 -- (Optional) remap other ones too:
 map("n", "<leader>js", ":call jukit#cells#split()<CR>", opts)
@@ -33,18 +34,6 @@ map("n", "<leader>jS", ":JupyniumStartSync ", { noremap = true, silent = false }
 map("n", "<leader>jq", ":JupyniumStopSync<CR>", opts)
 map("n", "<leader>jr", ":JupyniumExecuteSelectedCells<CR>", opts)
 map("n", "<leader>jk", ":JupyniumKernelSelect<CR>", opts)
-
--- Keymaps for molten jupyter like env
-map("n", "<Leader>mr", ":MoltenEvaluateCell<CR>", opts)
-map("n", "<leader>mR", ":MoltenReevaluateCell<CR>", opts)
-map("n", "<Leader>mn", ":MoltenEvaluateNextCell<CR>", opts)
-map("n", "<Leader>mi", ":MoltenInit<CR>", opts)
-map("n", "<leader>me", ":MoltenEvaluateOperator<CR>", opts)
-map("n", "<leader>ml", ":MoltenEvaluateLine<CR>", opts)
-map("x", "<leader>mv", ":<C-u>MoltenEvaluateVisual<CR>", opts)
-map("n", "<leader>md", ":MoltenDelete<CR>", opts)
-map("n", "<leader>mo", ":MoltenShowOutput<CR>", opts)
-map("n", "<leader>mh", ":MoltenHideOutput<CR>", opts)
 
 -- collective rename
 map("n", "<leader>cN", ":%s/<C-r><C-w>//g<left><left>", { desc = "valIncRename" })

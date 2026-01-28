@@ -1,18 +1,8 @@
 return {
-  -- {
-  --   "GCBallesteros/jupytext.nvim",
-  --   lazy = false,
-  --   config = function()
-  --     require("jupytext").setup({
-  --       style = "hydrogen",
-  --       output_extension = "auto",
-  --       force_ft = nil,
-  --     })
-  --   end,
-  -- },
   {
     "luk400/vim-jukit",
-    lazy = false,
+    lazy = true,
+    ft = { "python", "ipynb" },
     config = function()
       vim.g.jukit_terminal = "kitty"
       vim.g.jukit_output_new_os_window = 1
