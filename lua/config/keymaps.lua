@@ -7,6 +7,15 @@ local opts = { noremap = true, silent = true }
 -- Cmd mode shorcut
 map("n", ";", ":")
 
+-- LSP
+map("n", "<leader>cD", function()
+  local d = vim.diagnostic.get(0, { lnum = vim.fn.line(".") - 1 })[1]
+  if d then
+    vim.fn.setreg("+", d.message)
+    print("Diagnostic copied")
+  end
+end)
+
 -- Keymaps Jukit
 map("n", "<leader>jo", ":call jukit#cells#create_below(0)<CR>", opts) -- Create code cell below
 map("n", "<leader>jO", ":call jukit#cells#create_above(0)<CR>", opts) -- Create code cell above

@@ -10,6 +10,7 @@ return {
       json = { "prettier" },
       jsp = { "prettier" },
       sql = { "pg_format_system" }, -- USE SYSTEM formatter
+      dart = { "dart_format" },
     },
 
     -- Define custom formatter pointing to system pg_format

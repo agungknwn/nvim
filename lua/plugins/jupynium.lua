@@ -1,6 +1,7 @@
 return {
   {
     "kiyoon/jupynium.nvim",
+    enabled = false,
     build = "pip3 install --user .",
     config = function()
       require("jupynium").setup({
