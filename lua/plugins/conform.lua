@@ -9,7 +9,7 @@ return {
       css = { "prettier" },
       json = { "prettier" },
       jsp = { "prettier" },
-      sql = { "pg_format_system" }, -- USE SYSTEM formatter
+      sql = { "sqlfluff" }, -- USE SYSTEM formatter
       dart = { "dart_format" },
     },
 

@@ -1,4 +1,3 @@
--- ~/.config/nvim/lua/plugins/python-jupyter.lua
 return {
   -- Configure LSP for Python and Jupyter notebooks
   {
@@ -25,6 +24,9 @@ return {
         },
         filetypes = { "python", "ipynb" },
       })
+
+      -- sqls config
+      opts.servers.sqls = vim.tbl_deep_extend("force", opts.servers.sqls or {}, {})
 
       return opts
     end,
