@@ -1,5 +1,58 @@
 return {
   {
+    "nvim-tree/nvim-tree.lua",
+    version = "*",
+    lazy = false,
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+    },
+    config = function()
+      -- attach function
+      local function my_on_attach(bufnr)
+        local api = require("nvim-tree.api")
+        local function opts(desc)
+          return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+        end
+
+        -- load default mapping
+        api.config.mappings.default_on_attach(bufnr)
+
+        -- custom mapping override
+        local map = vim.keymap.set
+        local unbind = vim.keymap.del
+        -- unbind key
+        unbind("n", "-", { buffer = bufnr })
+        unbind("n", "<Tab>", { buffer = bufnr })
+        -- interaction
+        map("n", "l", api.node.open.preview, opts("Preview"))
+        map("n", "t", api.node.open.tab, opts("Open in New Tab"))
+        map("n", "<A-s>", api.node.open.vertical, opts("Split Vertical"))
+        map("n", "<A-h>", api.node.open.horizontal, opts("Split Horizontal"))
+        -- tree structure
+        map("n", "L", api.tree.change_root_to_node, opts("CD dir"))
+        map("n", "h", api.tree.change_root_to_parent, opts("CD out"))
+      end
+
+      -- pass on attach func onto setup
+      require("nvim-tree").setup({
+        on_attach = my_on_attach,
+        sort_by = "case_sensitive",
+        view = {
+          width = 30,
+          side = "left",
+        },
+        renderer = {
+          group_empty = true,
+          highlight_opened_files = "all",
+        },
+        filters = {
+          dotfiles = false,
+        },
+      })
+    end,
+  },
+  -- Notification
+  {
     "folke/noice.nvim",
     opts = function(_, opts)
       table.insert(opts.routes, {

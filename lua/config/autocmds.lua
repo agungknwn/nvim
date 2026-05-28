@@ -8,56 +8,57 @@
 -- e.g. vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
 local last_theme = nil
 
-local function sync_theme()
-  -- get dekstop color-scheme
-  local function log_debug(msg)
-    vim.notify("Theme Debug: " .. msg, vim.log.levels.INFO)
-  end
-
-  local handle = io.popen("gsettings get org.gnome.desktop.interface color-scheme")
+local function get_gtk_theme()
+  -- local handle = io.popen("gsettings get org.gnome.desktop.interface gtk-theme 2>/dev/null")
+  local handle = io.popen("grep '^\\$GTK_THEME=' ~/.config/hypr/themes/wallbash.conf | cut -d= -f2 2>/dev/null")
   if not handle then
-    log_debug("Failed to run gsettings command")
-    return
+    return nil
   end
-
   local result = handle:read("*a")
   handle:close()
+  return result:gsub("^%s*'?", ""):gsub("'?%s*$", ""):lower()
+end
 
-  --Clean up the result
-  result = result:gsub("^%s*'?", ""):gsub("'?%s*$", "")
+local function sync_theme()
+  local gtk_theme = get_gtk_theme()
+  if not gtk_theme or gtk_theme == last_theme then
+    return
+  end
+  last_theme = gtk_theme
 
-  -- parse the result
-  if result ~= last_theme then
-    log_debug("Theme changed from " .. tostring(last_theme) .. " to " .. result)
-    last_theme = result
-    local is_dark = result == "prefer-dark"
-
-    -- set the appropriate theme
-    if is_dark then
-      vim.schedule(function()
-        vim.o.background = "dark"
-        vim.cmd("colorscheme tokyonight")
-      end)
-    else
-      vim.schedule(function()
-        vim.o.background = "light"
-        vim.cmd("colorscheme catppuccin")
-      end)
-    end
+  if gtk_theme:find("oxo") then
+    vim.schedule(function()
+      vim.o.background = "dark"
+      vim.cmd("colorscheme oxocarbon")
+    end)
+  elseif gtk_theme:find("vanta") then
+    vim.schedule(function()
+      vim.o.background = "dark"
+      vim.cmd("colorscheme oxocarbon")
+    end)
+  elseif gtk_theme:find("tokyo") then
+    vim.schedule(function()
+      vim.o.background = "dark"
+      vim.cmd("colorscheme tokyonight")
+    end)
+  else
+    vim.schedule(function()
+      vim.o.background = "light"
+      vim.cmd("colorscheme catppuccin")
+    end)
   end
 end
 
--- create autocommand group for theme sync
+-- Autocommand group for theme sync
 local theme_group = vim.api.nvim_create_augroup("ThemeSync", { clear = true })
 
--- check theme on startup
 vim.api.nvim_create_autocmd("User", {
   pattern = "LazyVimStarted",
   group = theme_group,
   callback = sync_theme,
 })
 
--- Autocommand to Set filetype for .ipynb files
+-- Filetype for .ipynb
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = "*.ipynb",
   callback = function()
@@ -65,14 +66,8 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   end,
 })
 
--- set up timer to check theme periodically
+-- Poll every 1s (1000ms) — gsettings is cheap to call
 local timer = vim.uv.new_timer()
 if timer then
-  timer:start(
-    200,
-    100,
-    vim.schedule_wrap(function()
-      sync_theme()
-    end)
-  )
+  timer:start(200, 1000, vim.schedule_wrap(sync_theme))
 end

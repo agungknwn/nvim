@@ -77,7 +77,17 @@ map("n", "<A-h>", "<C-w>h")
 map("n", "<A-l>", "<C-w>l")
 map("n", "<A-k>", "<C-w>k")
 map("n", "<A-j>", "<C-w>j")
-map("n", "<A-e>", ":Neotree focus<CR>", opts)
+-- map("n", "<A-e>", ":Neotree focus<CR>", opts)
+
+-- Nvim tree
+pcall(vim.keymap.del, "n", "<leader>e") -- del neotree key
+
+map("n", "<leader>e", ":NvimTreeToggle<CR>", {
+  noremap = true,
+  silent = true,
+  desc = "Toggle NvimTree",
+})
+map("n", "<A-e>", ":NvimTreeFocus<CR>", opts)
 
 -- Resize Window
 map("n", "<C-h>", "<C-w>>")

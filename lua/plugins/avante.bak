@@ -1,0 +1,30 @@
+return {
+  "yetone/avante.nvim",
+  event = "VeryLazy",
+  version = false,
+  build = "make",
+  opts = {
+    provider = "ollama",
+    providers = {
+      ollama = {
+        model = "qwen2.5-coder:7b",
+        is_env_set = function()
+          return require("avante.providers.ollama").check_endpoint_alive()
+        end,
+        extra_request_body = {
+          num_ctx = 2048,
+        },
+      },
+    },
+  },
+  dependencies = {
+    "nvim-lua/plenary.nvim",
+    "MunifTanjim/nui.nvim",
+    "nvim-tree/nvim-web-devicons",
+    {
+      "MeanderingProgrammer/render-markdown.nvim",
+      opts = { file_types = { "markdown", "Avante" } },
+      ft = { "markdown", "Avante" },
+    },
+  },
+}
